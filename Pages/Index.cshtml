@@ -1,0 +1,84 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<form class="mb-5 mt-5" method="post" asp-page="Index" asp-page-handler="calculate">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Weight" asp-for="@Model.weight">
+        <span class="input-group-text" asp-validation-for="weight">kg</span>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Height" asp-for="@Model.height">
+        <span class="input-group-text" asp-validation-for="height">cm</span>
+    </div>
+
+    <!-- Display validation errors here -->
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <button type="submit" class="w-100 btn btn-success">Calculate</button>
+        </div>
+        <div class="col-6">
+            <button type="submit" class="w-100 btn btn-secondary" asp-page="Index"
+                asp-page-handler="clear">Clear</button>
+        </div>
+    </div>
+</form>
+
+
+@if (@Model.bmi != 0)
+{
+    <div class="alert alert-primary mb-5">
+        <p>Your BMI is: @Model.bmi</p>
+        <p>Your status is: @Model.status</p>
+    </div>
+}
+
+
+<h4 class="display-7">BMI introduction</h4>
+<p>
+    BMI, or Body Mass Index, is a numerical value derived from a person's weight and height. It is used as a simple and
+    quick method to estimate whether a person has a healthy body weight for their height. BMI is widely used in medical,
+    fitness, and healthcare fields as an initial screening tool to categorize individuals into different weight
+    categories, which can help assess potential health risks associated with weight.
+</p>
+<p>
+    The formula for calculating BMI is as follows:
+</p>
+<p>
+    <code>BMI = weight (in kilograms) / (height (in meters))^2</code>
+</p>
+<p>Alternatively, you can calculate BMI using pounds and inches with the following formula:</p>
+
+<p>
+    <code>BMI = (weight (in pounds) / (height (in inches))^2) * 703</code>
+</p>
+
+
+<ul>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Underweight}" ? "highlight" : "")">Underweight: BMI less than 18.5
+    </li>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Normal}" ? "highlight" : "")">Normal weight: BMI between 18.5 and
+        24.9</li>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Overweight}" ? "highlight" : "")">Overweight: BMI between 25 and
+        29.9</li>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Obesity1}" ? "highlight" : "")">Obesity (Class I): BMI between 30
+        and 34.9</li>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Obesity2}" ? "highlight" : "")">Obesity (Class II): BMI between 35
+        and 39.9</li>
+    <li class="@(@Model.statusLevel == $"{BMI_STATUS.Obesity3}" ? "highlight" : "")">Obesity (Class III): BMI 40 or
+        higher</li>
+</ul>
+
+<p>It's important to note that while BMI is a useful tool for quickly assessing body weight, it has limitations. It does
+    not take into account factors like muscle mass, bone density, or body composition, which means that it may not
+    provide a complete picture of an individual's health. Therefore, it is often used in conjunction with other health
+    assessments to make more accurate determinations about an individual's overall health and risk factors.</p>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
